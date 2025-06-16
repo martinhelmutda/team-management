@@ -14,7 +14,7 @@ This project includes both a backend and a frontend that need to run simultaneou
 #### Steps:
 1. Clone:
     ```bash 
-    git clone https://github.com/your-username/team-management.git 
+    [git clone https://github.com/martinhelmutda/team-management.git ](https://github.com/martinhelmutda/team-management.git)
     cd team-management
     ```
 
