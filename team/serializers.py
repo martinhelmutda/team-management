@@ -11,8 +11,8 @@ class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamMember
         fields = "__all__"
-        read_only_fields = ["id", "date_joined", "last_login"]
-        extra_kwargs = {"password": {"write_only": True}}
+        read_only_fields = ["id", "date_joined", "last_login", "username"]
+        extra_kwargs = {"password": {"write_only": True, "required": False},}
 
     def create(self, validated_data):
         """
@@ -20,6 +20,8 @@ class TeamMemberSerializer(serializers.ModelSerializer):
         The password is hashed before saving.
         """
         user = TeamMember(**validated_data)
-        user.set_password(validated_data["password"])
+        password = validated_data.get("password") or validated_data.get("phone_number")
+        user.username = validated_data.get("email")
+        user.set_password(password)
         user.save()
         return user
