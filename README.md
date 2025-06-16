@@ -12,9 +12,10 @@ This project includes both a backend and a frontend that need to run simultaneou
 - [Make](https://www.gnu.org/software/make/) must be installed to run the provided Makefile commands.
 
 #### Steps:
+
 1. Clone:
     ```bash 
-    [git clone https://github.com/martinhelmutda/team-management.git ](https://github.com/martinhelmutda/team-management.git)
+    git clone https://github.com/martinhelmutda/team-management.git
     cd team-management
     ```
 
@@ -83,7 +84,7 @@ PostgreSQL is a more robust option for production, but for a small demo like thi
 
 Vite has a simple setup and a built-in support for React/Typescript. This tool is not as mature as Webpack, Next.js or other alternatives but it is perfect for small projects.
 
-## Future Improvements if needed
+## Future Improvements (if needed)
 - Use Postgresql as main database
 - Add Docker setup
 - Create multiple teams and assign team members
@@ -95,10 +96,11 @@ Vite has a simple setup and a built-in support for React/Typescript. This tool i
 ## Testing Strategy
 ### Backend
 API tests with mocked data
+
 ```bash
 make test
 ```
 
 ## Development Time
-- **Backend* ~5 hours
-- **Frontend* ~13 hours
+- **Backend** ~5 hours
+- **Frontend** ~13 hours
