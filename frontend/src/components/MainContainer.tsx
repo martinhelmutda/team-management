@@ -44,7 +44,7 @@ export default function MainContainer({ title, subtitle, children }: MainContain
                     )}
                 </Box>{/* Header */}
 
-                <Box sx={{ p: { xs: 2, sm: 4 } }}>{children}</Box>{/* Conetnet */}
+                <Box sx={{ p: { xs: 2, sm: 4 } }}>{children}</Box>{/* Content */}
             </Paper>
         </Box>
     );

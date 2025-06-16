@@ -9,7 +9,6 @@ import {
     Stack,
     Chip,
     IconButton,
-    Divider,
 } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
