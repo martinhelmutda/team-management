@@ -30,7 +30,8 @@ export default function Add() {
     const [role, setRole] = useState<"regular" | "admin">("regular");
     const [fieldErrors, setFieldErrors] = useState<{ [k: string]: string }>({});
     const navigate = useNavigate();
-
+    const API_URL = import.meta.env.VITE_API_URL;
+    
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
         setError(null);
@@ -73,7 +74,7 @@ export default function Add() {
 
         setLoading(true);
         try {
-            const res = await fetch("http://localhost:8000/api/team-members/", {
+            const res = await fetch(`${API_URL}/team-members/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),

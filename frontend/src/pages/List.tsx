@@ -26,9 +26,10 @@ function initials(first: string, last: string) {
 export default function List() {
     const [members, setMembers] = useState<Member[]>([]);
     const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
-        fetch("http://localhost:8000/api/team-members/")
+        fetch(`${API_URL}/team-members/`)
             .then((res) => res.json())
             .then((data: Member[]) => setMembers(data));
     }, []);

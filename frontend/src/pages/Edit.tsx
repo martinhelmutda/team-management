@@ -38,9 +38,10 @@ export default function Edit() {
     const [loading, setLoading] = useState(false);
     const [role, setRole] = useState<"regular" | "admin">("regular");
     const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
-        fetch(`http://localhost:8000/api/team-members/${id}/`)
+        fetch(`${API_URL}/team-members/${id}/`)
             .then((res) => res.json())
             .then((data: MemberForm) => {
                 setForm(data);
@@ -90,7 +91,7 @@ export default function Edit() {
         if (Object.keys(errors).length > 0) return;
         setLoading(true);
         try {
-            const res = await fetch(`http://localhost:8000/api/team-members/${id}/`, {
+            const res = await fetch(`${API_URL}/team-members/${id}/`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
@@ -112,7 +113,7 @@ export default function Edit() {
     const handleDelete = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`http://localhost:8000/api/team-members/${id}/`, {
+            const res = await fetch(`${API_URL}/team-members/${id}/`, {
                 method: "DELETE",
             });
             if (res.ok) {
