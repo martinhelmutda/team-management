@@ -42,10 +42,10 @@ install:
 freeze:
 	pip freeze > requirements/requirements_$(ENV).txt
 
-make run_frontend:
+run_frontend:
 	cd frontend && npm run dev
 
-make install_frontend:
+install_frontend:
 	cd frontend && npm install
 
 test:
