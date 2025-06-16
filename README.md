@@ -5,6 +5,11 @@ user to view, edit, add, and delete team members.
 ## Quick Start
 This project includes both a backend and a frontend that need to run simultaneously.
 
+
+#### Prerequisites
+- [Make](https://www.gnu.org/software/make/) must be installed to run the provided Makefile commands.
+
+#### Steps:
 1. Clone:
     ```bash 
     git clone https://github.com/your-username/team-management.git 
@@ -20,28 +25,33 @@ This project includes both a backend and a frontend that need to run simultaneou
 3. Install dependencies:
     ```bash
     make install
-
-    # If you do not use make, then run 
-    pip install -r requirements/requirements_dev.txt
-    cd frontend
-    npm install
+    make install_frontend
     ```
 
 4. Set environment variables for Backend
+    
     Copy `.env.template`to `.env`and set env variables if needed
-   The frontend dev server runs on `http://localhost:5173` by default.
+    
+    The frontend dev server runs on `http://localhost:5173` by default.
 
-3. Set environment variable for Frontend
+5. Set environment variable for Frontend
+    
     Copy `.env.template`to `.env`and set env variables if needed
     ```bash
     cp frontend/.env.template frontend/.env
     ```
-   
 
-2. Development servers:
-   ```bash
-   make run
-   ```
+
+6. Development servers:
+
+    Open two terminal windows or tabs at the root of the project and run the following commands separately:
+    ```bash
+    # Terminal 1
+    make run
+
+    # Terminal 2
+    make run_frontend
+    ```
 
 ## Solution Approach
 ### Backend

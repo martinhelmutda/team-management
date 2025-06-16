@@ -4,20 +4,19 @@ ENV ?= dev
 help:
 	@echo "Current ENV: $(ENV)"
 	@echo "Available commands:"
-	@echo "  run                Run backend and frontend in a tmux session concurrently"
+	@echo "  run                Run the Django development server"
+	@echo "  run_frontend       Run the frontend development server"
+	@echo "  install			Install dependencies for the current environment"
+	@echo "  install_frontend   Install frontend dependencies"
 	@echo "  makemigrations     Create new database migrations"
 	@echo "  migrate            Apply database migrations"
 	@echo "  createsuperuser    Create a new superuser"
-	@echo "  install			Install backend and frontend dependencies"
 	@echo "  freeze             Freeze current dependencies to requirements file"
 	@echo "  lint               Run linter on the codebase"
 	@echo "  format             Format the codebase using ruff"
 
 run:
-	@echo "Starting backend and frontend..."
-	@tmux new-session -d -s team-management 'source venv/bin/activate && python manage.py runserver'
-	@tmux split-window -h -t team-management 'cd frontend && npm run dev'
-	@tmux attach-session -t team-management
+	python manage.py runserver
 
 makemigrations:
 	python manage.py makemigrations
@@ -32,15 +31,18 @@ lint:
 	ruff check .
 
 format:
-	@echo "Formatting codebase..."
 	black .
 	isort .
 	ruff format .
 
 install:
-	@echo "Installing dependencies for environment: $(ENV)"
 	pip install -r requirements/requirements_$(ENV).txt
-	cd frontend && npm install
 
 freeze:
 	pip freeze > requirements/requirements_$(ENV).txt
+
+make run_frontend:
+	cd frontend && npm run dev
+
+make install_frontend:
+	cd frontend && npm install
