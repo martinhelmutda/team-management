@@ -89,4 +89,7 @@ Vite has a simple setup and a built-in support for React/Typescript. This tool i
 
 ## Testing Strategy
 ### Backend
-Unit Testing with mocked data.
+API tests with mocked data
+```bash
+make test
+```
