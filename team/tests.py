@@ -4,12 +4,13 @@ from team.models import TeamMember
 
 class TeamMemberViewSetTests(APITestCase):
     def test_get_team_member_list(self):
-        TeamMember.objects.create(
+        member = TeamMember.objects.create(
             first_name="Daniela",
             last_name="Suarez",
             email="daniela@example.com",
-            phone_number="2314234567"
+            phone_number="2314234567",
         )
+        member.groups.set([2])
         url = reverse('teammember-list')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
@@ -21,7 +22,8 @@ class TeamMemberViewSetTests(APITestCase):
             "first_name": "Juan",
             "last_name": "Perez",
             "email": "juanp@example.com",
-            "phone_number": "525781234"
+            "phone_number": "525781234",
+            "groups": [2],
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, 201)
@@ -34,7 +36,8 @@ class TeamMemberViewSetTests(APITestCase):
             "first_name": "Beto",
             "last_name": "Martin",
             "email": "beto@example.com",
-            "phone_number": "6798203456"
+            "phone_number": "6798203456",
+            "groups": [1],
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, 201)
@@ -46,8 +49,9 @@ class TeamMemberViewSetTests(APITestCase):
             first_name="Maria",
             last_name="Martinez",
             email="maria@example.com",
-            phone_number="1234567890"
+            phone_number="1234567890",
         )
+        member.groups.set([1])
         url = reverse('teammember-detail', args=[member.id])
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
@@ -58,14 +62,16 @@ class TeamMemberViewSetTests(APITestCase):
             first_name="Karla",
             last_name="Guillen",
             email="karla@example.com",
-            phone_number="8955435432"
+            phone_number="8955435432",
         )
+        member.groups.set([2])
         url = reverse('teammember-detail', args=[member.id])
         updated_data = {
             "first_name": "Karla",
             "last_name": "Guillen",
             "email": "karla_new@example.com",
-            "phone_number": "8955435432"
+            "phone_number": "8955435432",
+            "groups":[2]
         }
         response = self.client.put(url, updated_data, format='json')
         self.assertEqual(response.status_code, 200)
@@ -76,8 +82,9 @@ class TeamMemberViewSetTests(APITestCase):
             first_name="Francisco",
             last_name="Lopez",
             email="fran@example.com",
-            phone_number="5554445555"
+            phone_number="5554445555",
         )
+        member.groups.set([2])
         url = reverse('teammember-detail', args=[member.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
