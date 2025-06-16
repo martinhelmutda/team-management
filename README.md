@@ -7,6 +7,8 @@ This project includes both a backend and a frontend that need to run simultaneou
 
 
 #### Prerequisites
+- [Python3](https://www.python.org)
+- [Node](https://nodejs.org/es) 
 - [Make](https://www.gnu.org/software/make/) must be installed to run the provided Makefile commands.
 
 #### Steps:
@@ -18,7 +20,7 @@ This project includes both a backend and a frontend that need to run simultaneou
 
 2. Set up virtual environment:
     ```bash 
-    python -m venv venv 
+    python3 -m venv venv 
     source venv/bin/activate
     ```
 
@@ -31,7 +33,9 @@ This project includes both a backend and a frontend that need to run simultaneou
 4. Set environment variables for Backend
     
     Copy `.env.template`to `.env`and set env variables if needed
-    
+    ```bash
+    cp .env.template .env
+    ```
     The frontend dev server runs on `http://localhost:5173` by default.
 
 5. Set environment variable for Frontend
@@ -86,6 +90,7 @@ Vite has a simple setup and a built-in support for React/Typescript. This tool i
 - Use UUIDs for team member IDs
 - Centralize frontend API calls in a `services/` directory
 - Add login functionality
+- Add pagination for API Endpoints
 
 ## Testing Strategy
 ### Backend
@@ -93,3 +98,7 @@ API tests with mocked data
 ```bash
 make test
 ```
+
+## Development Time
+- **Backend* ~5 hours
+- **Frontend* ~13 hours
