@@ -52,7 +52,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
+
+CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="localhost:5173", cast=Csv())
 
 ROOT_URLCONF = "config.urls"
 
