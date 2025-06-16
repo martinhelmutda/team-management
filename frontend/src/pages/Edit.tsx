@@ -22,7 +22,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import MainContainer from "../components/MainContainer";
 import { Delete } from "@mui/icons-material";
 import { MemberForm } from "../models";
-
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
 
 export default function Edit() {
     const { id } = useParams<{ id: string }>();
@@ -30,6 +34,7 @@ export default function Edit() {
     const [fieldErrors, setFieldErrors] = useState<{ [k: string]: string }>({});
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
+    const [confirmOpen, setConfirmOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [role, setRole] = useState<"regular" | "admin">("regular");
     const navigate = useNavigate();
@@ -302,7 +307,7 @@ export default function Edit() {
                     <Box>
                         <Button
                             type="button"
-                            onClick={handleDelete}
+                            onClick={() => setConfirmOpen(true)}
                             disabled={loading}
                             startIcon={<Delete />}
                             sx={{
@@ -342,6 +347,33 @@ export default function Edit() {
                         </Button>
                     </Box>
                 </Box>{/* Buttons Row */}
+
+                <Dialog
+                    open={confirmOpen}
+                    onClose={() => setConfirmOpen(false)}
+                >
+                    <DialogTitle>Confirm Delete</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Are you sure you want to delete this team member? This action cannot be undone.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setConfirmOpen(false)} disabled={loading}>
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={async () => {
+                                setConfirmOpen(false);
+                                await handleDelete();
+                            }}
+                            color="error"
+                            disabled={loading}
+                        >
+                            Delete
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
             </Stack>
         </MainContainer>
