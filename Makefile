@@ -14,6 +14,7 @@ help:
 	@echo "  freeze             Freeze current dependencies to requirements file"
 	@echo "  lint               Run linter on the codebase"
 	@echo "  format             Format the codebase using ruff"
+	@echo "  test               Run tests"
 
 run:
 	python manage.py runserver
@@ -46,3 +47,6 @@ make run_frontend:
 
 make install_frontend:
 	cd frontend && npm install
+
+test:
+	python manage.py test
