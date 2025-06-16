@@ -7,15 +7,29 @@ def assign_permissions(apps, _):
     Permission = apps.get_model('auth', 'Permission')
     ContentType = apps.get_model('contenttypes', 'ContentType')
 
-    content_type = ContentType.objects.get(app_label='team', model='teammember')
+    TeamMember = apps.get_model('team', 'TeamMember')
+    content_type = ContentType.objects.get_for_model(TeamMember)
 
     admin_group, _ = Group.objects.get_or_create(name='admin')
     regular_group, _ = Group.objects.get_or_create(name='regular')
 
-    add_perm = Permission.objects.get(content_type=content_type, codename='add_teammember')
-    change_perm = Permission.objects.get(content_type=content_type, codename='change_teammember')
-    delete_perm = Permission.objects.get(content_type=content_type, codename='delete_teammember')
-    view_perm = Permission.objects.get(content_type=content_type, codename='view_teammember')
+    perms = [
+        ('add_teammember', 'Can add team member'),
+        ('change_teammember', 'Can change team member'),
+        ('delete_teammember', 'Can delete team member'),
+        ('view_teammember', 'Can view team member'),
+    ]
+
+    perm_objs = []
+    for codename, name in perms:
+        perm, _ = Permission.objects.get_or_create(
+            content_type=content_type,
+            codename=codename,
+            defaults={'name': name}
+        )
+        perm_objs.append(perm)
+
+    add_perm, change_perm, delete_perm, view_perm = perm_objs
 
     admin_group.permissions.set([add_perm, change_perm, delete_perm, view_perm])
     regular_group.permissions.set([add_perm, view_perm, change_perm])
