@@ -63,7 +63,7 @@ This project includes both a backend and a frontend that need to run simultaneou
 The goal is to build a simple, maintainable Django app using solid coding practices. The tech stack is intentionally lightweight, but the project is structured to support multiple environments (e.g., development, production) if needed.
 
 ### Frontend
-The frontend must provide a fast and modern development experience. The structure of te codebase should promote component reusability, type safety and clear separation of concerns.
+The frontend must provide a fast and modern development experience. The structure of the codebase should promote component reusability, type safety and clear separation of concerns.
 
 ## Implementation Details
 ### Backend
