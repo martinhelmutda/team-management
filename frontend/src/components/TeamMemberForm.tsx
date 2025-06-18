@@ -19,8 +19,6 @@ type TeamMemberFormProps = {
         groups: number[];
     };
     fieldErrors: { [k: string]: string };
-    error: string | null;
-    success: string | null;
     loading: boolean;
     role: "regular" | "admin";
     setRole: (r: "regular" | "admin") => void;
@@ -36,8 +34,6 @@ type TeamMemberFormProps = {
 export default function TeamMemberForm({
     form,
     fieldErrors,
-    error,
-    success,
     loading,
     role,
     setRole,
@@ -51,8 +47,6 @@ export default function TeamMemberForm({
     return (
 
         <Stack spacing={2} component="form" onSubmit={handleSubmit}>
-            {error && <Alert severity="error">{error}</Alert>}
-            {success && <Alert severity="success">{success}</Alert>}
 
             <Button
                 variant="text"

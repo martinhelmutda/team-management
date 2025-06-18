@@ -5,8 +5,7 @@ import MainContainer from "../components/MainContainer";
 import { MemberForm } from "../models";
 import TeamMemberForm from "../components/TeamMemberForm";
 import { parseApiError, validateMemberForm } from "../utils/validation";
-
-
+import { useNotification } from "../context/NotificationContext";
 
 export default function Add() {
     const [form, setForm] = useState<MemberForm>({
@@ -16,8 +15,7 @@ export default function Add() {
         phone_number: "",
         groups: [1],
     });
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
+    const { setNotification } = useNotification();
     const [loading, setLoading] = useState(false);
     const [role, setRole] = useState<"regular" | "admin">("regular");
     const [fieldErrors, setFieldErrors] = useState<{ [k: string]: string }>({});
@@ -26,16 +24,12 @@ export default function Add() {
     
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-        setError(null);
-        setSuccess(null);
     };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const errors = validateMemberForm(form);
         setFieldErrors(errors);
-        setError(null);
-        setSuccess(null);
 
         if (Object.keys(errors).length > 0) return;
 
@@ -48,13 +42,13 @@ export default function Add() {
             });
 
             if (res.ok) {
-                setSuccess("Team member added!");
+                setNotification({ type: "success", message: "Team member added!" });
                 setTimeout(() => navigate("/"), 800);
             } else {
-                    setError(await parseApiError(res));
+                setNotification({ type: "error", message: await parseApiError(res) });
             }
         } catch {
-            setError("Network error. Please try again.");
+            setNotification({ type: "error", message: "Network error. Please try again." });
         } finally {
             setLoading(false);
         }
@@ -68,8 +62,6 @@ export default function Add() {
             <TeamMemberForm
                 form={form}
                 fieldErrors={fieldErrors}
-                error={error}
-                success={success}
                 loading={loading}
                 role={role}
                 setRole={(selected) => {

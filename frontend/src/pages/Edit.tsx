@@ -10,13 +10,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import { Button } from "@mui/material";
 import { parseApiError, validateMemberForm } from "../utils/validation";
+import { useNotification } from "../context/NotificationContext";
 
 export default function Edit() {
+    const { setNotification } = useNotification();
     const { id } = useParams<{ id: string }>();
     const [form, setForm] = useState<MemberForm | null>(null);
     const [fieldErrors, setFieldErrors] = useState<{ [k: string]: string }>({});
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [role, setRole] = useState<"regular" | "admin">("regular");
@@ -38,8 +38,7 @@ export default function Edit() {
         if (!form) return;
         setForm({ ...form, [e.target.name]: e.target.value });
         setFieldErrors((prev) => ({ ...prev, [e.target.name]: "" }));
-        setError(null);
-        setSuccess(null);
+
     };
 
     const handleSubmit = async (e: FormEvent) => {
@@ -47,8 +46,7 @@ export default function Edit() {
         if (!form) return;
         const errors = validateMemberForm(form);
         setFieldErrors(errors);
-        setError(null);
-        setSuccess(null);
+
         if (Object.keys(errors).length > 0) return;
         setLoading(true);
         try {
@@ -58,13 +56,13 @@ export default function Edit() {
                 body: JSON.stringify(form),
             });
             if (res.ok) {
-                setSuccess("Team member updated!");
+                setNotification({ type: "success", message: "Team member updated!" });
                 setTimeout(() => navigate("/"), 800);
             } else {
-                setError(await parseApiError(res));
+            setNotification({ type: "error", message: await parseApiError(res) });
             }
         } catch {
-            setError("Network error. Please try again.");
+            setNotification({ type: "error", message: await parseApiError(res) });
         } finally {
             setLoading(false);
         }
@@ -77,12 +75,13 @@ export default function Edit() {
                 method: "DELETE",
             });
             if (res.ok) {
+                setNotification({ type: "success", message: "Team member deleted!" });
                 navigate("/");
             } else {
-                setError(await parseApiError(res));
+                setNotification({ type: "error", message: await parseApiError(res) });
             }
         } catch {
-            setError("Network error. Please try again.");
+            setNotification({ type: "error", message: "Network error. Please try again." });
         } finally {
             setLoading(false);
         }
@@ -95,8 +94,6 @@ export default function Edit() {
             <TeamMemberForm
                 form={form}
                 fieldErrors={fieldErrors}
-                error={error}
-                success={success}
                 loading={loading}
                 role={role}
                 setRole={(selected) => {
