@@ -51,9 +51,9 @@ export default function Add() {
         if (!form.phone_number.trim()) {
             errors.phone_number = "Phone number is required";
         } else {
-            const phoneRegex = /^[0-9]+$/;
+            const phoneRegex = /^[0-9]{10}$/;
             if (!phoneRegex.test(form.phone_number)) {
-                errors.phone_number = "Phone number must contain only digits";
+                errors.phone_number = "Phone number must be exactly 10 digits (numbers only)";
             }
         }
 
