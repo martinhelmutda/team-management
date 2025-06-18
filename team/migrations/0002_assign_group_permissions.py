@@ -2,30 +2,29 @@
 
 from django.db import migrations
 
-def assign_permissions(apps, _):
-    Group = apps.get_model('auth', 'Group')
-    Permission = apps.get_model('auth', 'Permission')
-    ContentType = apps.get_model('contenttypes', 'ContentType')
 
-    TeamMember = apps.get_model('team', 'TeamMember')
+def assign_permissions(apps, _):
+    Group = apps.get_model("auth", "Group")
+    Permission = apps.get_model("auth", "Permission")
+    ContentType = apps.get_model("contenttypes", "ContentType")
+
+    TeamMember = apps.get_model("team", "TeamMember")
     content_type = ContentType.objects.get_for_model(TeamMember)
 
-    admin_group, _ = Group.objects.get_or_create(name='admin')
-    regular_group, _ = Group.objects.get_or_create(name='regular')
+    admin_group, _ = Group.objects.get_or_create(name="admin")
+    regular_group, _ = Group.objects.get_or_create(name="regular")
 
     perms = [
-        ('add_teammember', 'Can add team member'),
-        ('change_teammember', 'Can change team member'),
-        ('delete_teammember', 'Can delete team member'),
-        ('view_teammember', 'Can view team member'),
+        ("add_teammember", "Can add team member"),
+        ("change_teammember", "Can change team member"),
+        ("delete_teammember", "Can delete team member"),
+        ("view_teammember", "Can view team member"),
     ]
 
     perm_objs = []
     for codename, name in perms:
         perm, _ = Permission.objects.get_or_create(
-            content_type=content_type,
-            codename=codename,
-            defaults={'name': name}
+            content_type=content_type, codename=codename, defaults={"name": name}
         )
         perm_objs.append(perm)
 
@@ -34,13 +33,14 @@ def assign_permissions(apps, _):
     admin_group.permissions.set([add_perm, change_perm, delete_perm, view_perm])
     regular_group.permissions.set([add_perm, view_perm, change_perm])
 
+
 def remove_permissions(apps, _):
-    Group = apps.get_model('auth', 'Group')
-    Group.objects.filter(name='admin').delete()
-    Group.objects.filter(name='regular').delete()
+    Group = apps.get_model("auth", "Group")
+    Group.objects.filter(name="admin").delete()
+    Group.objects.filter(name="regular").delete()
+
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("team", "0001_initial"),
     ]
