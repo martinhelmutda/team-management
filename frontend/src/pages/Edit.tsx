@@ -9,7 +9,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import { Button } from "@mui/material";
-import { validateMemberForm } from "../utils/validation";
+import { parseApiError, validateMemberForm } from "../utils/validation";
 
 export default function Edit() {
     const { id } = useParams<{ id: string }>();
@@ -79,7 +79,7 @@ export default function Edit() {
             if (res.ok) {
                 navigate("/");
             } else {
-                setError("Failed to delete. Please try again.");
+                setError(await parseApiError(res));
             }
         } catch {
             setError("Network error. Please try again.");
@@ -143,7 +143,5 @@ export default function Edit() {
         </MainContainer>
     );
 }
-function parseApiError(res: Response): import("react").SetStateAction<string | null> | PromiseLike<import("react").SetStateAction<string | null>> {
-    throw new Error("Function not implemented.");
-}
+
 
