@@ -9,6 +9,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import { Button } from "@mui/material";
+import { validateMemberForm } from "../utils/validation";
 
 export default function Edit() {
     const { id } = useParams<{ id: string }>();
@@ -44,29 +45,7 @@ export default function Edit() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!form) return;
-        const errors: { [k: string]: string } = {};
-        if (!form.first_name.trim()) {
-            errors.first_name = "First name is required";
-        }
-        if (!form.last_name.trim()) {
-            errors.last_name = "Last name is required";
-        }
-        if (!form.email.trim()) {
-            errors.email = "Email is required";
-        } else {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(form.email)) {
-                errors.email = "Please enter a valid email address";
-            }
-        }
-        if (!form.phone_number.trim()) {
-            errors.phone_number = "Phone number is required";
-        } else {
-            const phoneRegex = /^[0-9]+$/;
-            if (!phoneRegex.test(form.phone_number)) {
-                errors.phone_number = "Phone number must contain only digits";
-            }
-        }
+        const errors = validateMemberForm(form);
         setFieldErrors(errors);
         setError(null);
         setSuccess(null);
@@ -82,8 +61,7 @@ export default function Edit() {
                 setSuccess("Team member updated!");
                 setTimeout(() => navigate("/"), 800);
             } else {
-                const data = await res.json();
-                setError(data?.detail || "Failed to update. Please try again.");
+                setError(await parseApiError(res));
             }
         } catch {
             setError("Network error. Please try again.");
@@ -165,3 +143,7 @@ export default function Edit() {
         </MainContainer>
     );
 }
+function parseApiError(res: Response): import("react").SetStateAction<string | null> | PromiseLike<import("react").SetStateAction<string | null>> {
+    throw new Error("Function not implemented.");
+}
+

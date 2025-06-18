@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MainContainer from "../components/MainContainer";
 import { MemberForm } from "../models";
 import TeamMemberForm from "../components/TeamMemberForm";
+import { parseApiError, validateMemberForm } from "../utils/validation";
 
 
 
@@ -31,32 +32,7 @@ export default function Add() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const errors: { [k: string]: string } = {};
-
-        // Validate fields
-        if (!form.first_name.trim()) {
-            errors.first_name = "First name is required";
-        }
-        if (!form.last_name.trim()) {
-            errors.last_name = "Last name is required";
-        }
-        if (!form.email.trim()) {
-            errors.email = "Email is required";
-        } else {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(form.email)) {
-                errors.email = "Please enter a valid email address";
-            }
-        }
-        if (!form.phone_number.trim()) {
-            errors.phone_number = "Phone number is required";
-        } else {
-            const phoneRegex = /^[0-9]{10}$/;
-            if (!phoneRegex.test(form.phone_number)) {
-                errors.phone_number = "Phone number must be exactly 10 digits (numbers only)";
-            }
-        }
-
+        const errors = validateMemberForm(form);
         setFieldErrors(errors);
         setError(null);
         setSuccess(null);
@@ -75,8 +51,7 @@ export default function Add() {
                 setSuccess("Team member added!");
                 setTimeout(() => navigate("/"), 800);
             } else {
-                const data = await res.json();
-                setError(data?.detail || "Failed to add team member. Please try again.");
+                    setError(await parseApiError(res));
             }
         } catch {
             setError("Network error. Please try again.");
