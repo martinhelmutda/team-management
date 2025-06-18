@@ -40,7 +40,7 @@ export default function List() {
         >
 
 
-            <Box sx={{ px: { xs: 2, md: 6 }, mt: 1, mb: 3 }}>
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 3 }}>
                 <Button
                     startIcon={<AddIcon />}
                     variant="contained"
@@ -49,12 +49,12 @@ export default function List() {
                         color: "#fff",
                         fontWeight: 600,
                         borderRadius: 2,
-                        px: 3,
-                        py: 1.2,
+                        px: 2.5,
+                        py: 1,
                         boxShadow: "0 2px 10px rgba(70, 120, 255, 0.13)",
                         textTransform: "none",
-                        fontSize: 18,
-                        mb: 2,
+                        fontSize: { xs: 16, sm: 18 },
+                        width: { xs: "100%", sm: "auto" },
                     }}
                     onClick={() => navigate("/add")}
                 >
@@ -63,46 +63,64 @@ export default function List() {
             </Box>
 
 
-            <Box sx={{
-                mr: { xs: 2, md: 6 },
-                }}>
+            <Box>
                 <Stack spacing={2}>
                     {members.map((member) => (
                         <Paper
                             key={member.id}
                             sx={{
-                                p: 2.5,
+                                p: { xs: 1.5, sm: 2.5 },
                                 borderRadius: 3,
                                 display: "flex",
-                                minWidth: 400,
-                                width: "100%",
                                 alignItems: "center",
-                                boxShadow: "0 2px 8px rgba(40,64,247,0.03)",
+                                boxShadow: "0 2px 8px rgba(40,64,247,0.3)",
                                 background: "rgba(247, 249, 251, 0.85)",
+                                // flexDirection: { xs: "column", sm: "row" },
+                                gap: { xs: 1.5, sm: 0 },
                             }}
                             elevation={0}
                         >
 
                             <Avatar
                                 sx={{
-                                    width: 54,
-                                    height: 54,
+                                    width: { xs: 44, sm: 54 },
+                                    height: { xs: 44, sm: 54 },
                                     bgcolor: "#6583f7",
                                     fontWeight: 700,
-                                    fontSize: 22,
-                                    mr: 2.5,
+                                    fontSize: { xs: 18, sm: 22 },
+                                    mr: { xs: 1, sm: 2.5 },
+                                    mb: { xs: 1, sm: 0 },
+                                    display: { xs: "none", sm: "flex" },
                                 }}
                             >
                                 {initials(member.first_name, member.last_name)}
                             </Avatar>
 
+                            <Box sx={{
+                                flex: 1,
+                                width: "100%",
+                            }}>
+                                <Stack
+                                    direction="row"
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: { xs: "right", sm: "center" },
+                                        flexDirection: { xs: "column", sm: "row" },
+                                        justifyContent: "flex-start",
+                                        mb: 1,
+                                        gap: { xs: 0.5, sm: 1 },
+                                    }}
+                                >
 
-                            <Box sx={{ flex: 1 }}>
-                                <Stack direction="row" alignItems="center" spacing={1}>
-                                    <Typography variant="h6" fontWeight={700} sx={{ mr: 1 }} align="left" >
+                                    <Typography
+                                        variant="h6"
+                                        fontWeight={700}
+                                        align="left"
+                                    >
                                         {member.first_name} {member.last_name}
                                     </Typography>
-                                    {member.groups.includes(2)&& (
+
+                                    {member.groups.includes(2) && (
                                         <Chip
                                             label="admin"
                                             size="small"
@@ -113,14 +131,23 @@ export default function List() {
                                                 fontSize: 14,
                                                 ml: 0.5,
                                                 px: 0.8,
-                                                height: 24,
+                                                height: { xs: 20, sm: 24 },
                                                 textTransform: "capitalize",
                                                 letterSpacing: 0.3,
+                                                maxWidth: 80,
+                                                borderRadius: 1,
                                             }}
                                         />
                                     )}
                                 </Stack>
-                                <Stack direction="row" spacing={2} alignItems="center" mt={0.3}>
+                                <Stack
+                                    // alignItems="center"
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: { xs: "column", sm: "row" },
+                                        gap: { xs: 1, sm: 3 },
+                                    }}
+                                >
                                     <Stack direction="row" alignItems="center" spacing={0.7}>
                                         <PhoneIcon sx={{ color: "#6583f7", fontSize: 20 }} />
                                         <Typography color="text.secondary" fontSize={15}>
