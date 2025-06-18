@@ -17,7 +17,7 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
             serializer.save()
         except IntegrityError as e:
             message = str(e)
-            if "email" in message:
+            if "email" in message or "username" in message:
                 raise ValidationError(
                     {"detail": ["A team member with this email already exists."]}
                 )
@@ -37,7 +37,7 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
             serializer.save()
         except IntegrityError as e:
             message = str(e)
-            if "email" in message:
+            if "email" in message or "username" in message:
                 raise ValidationError(
                     {"email": ["A team member with this email already exists."]}
                 )
