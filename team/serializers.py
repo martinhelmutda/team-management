@@ -11,8 +11,16 @@ class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamMember
         fields = "__all__"
-        read_only_fields = ["id", "date_joined", "last_login", "username", "user_permissions"]
-        extra_kwargs = {"password": {"write_only": True, "required": False},}
+        read_only_fields = [
+            "id",
+            "date_joined",
+            "last_login",
+            "username",
+            "user_permissions",
+        ]
+        extra_kwargs = {
+            "password": {"write_only": True, "required": False},
+        }
 
     def create(self, validated_data):
         """
@@ -28,3 +36,27 @@ class TeamMemberSerializer(serializers.ModelSerializer):
         if groups:
             user.groups.set(groups)
         return user
+
+    def update(self, instance, validated_data):
+        """
+        Update an existing TeamMember instance.
+        If the email changes, update the username to match.
+        Optionally update the password
+        """
+        groups = validated_data.pop("groups", None)
+        email = validated_data.get("email")
+
+        if email and email != instance.email:
+            instance.username = email
+
+        password = validated_data.get("password")
+        if password:
+            instance.set_password(password)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        if groups is not None:
+            instance.groups.set(groups)
+        return instance

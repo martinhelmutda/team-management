@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 type MainContainerProps = {
@@ -6,46 +6,42 @@ type MainContainerProps = {
     subtitle?: string;
     children: ReactNode;
 };
-
 export default function MainContainer({ title, subtitle, children }: MainContainerProps) {
     return (
         <Box
             sx={{
                 minHeight: "100vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                py: 4,
+                width: "100vw",
+                background: "#f7f9fb",
             }}
         >
-            <Paper
-                elevation={4}
+
+            <Box
                 sx={{
-                    maxWidth: 640,
                     width: "100%",
-                    borderRadius: 4,
-                    overflow: "hidden",
+                    background: "linear-gradient(135deg, #4171fa 0%,#000000 100%)",
+                    px: { xs: 2, sm: 4 },
+                    pt: { xs: 3, sm: 5 },
+                    pb: { xs: 2, sm: 4 },
                 }}
             >
-                <Box
-                    sx={{
-                        background: "#4171fa",
-                        p: 4,
-                        pb: 3,
-                        borderTopLeftRadius: 12,
-                        borderTopRightRadius: 12,
-                    }}
-                >
-                    <Typography variant="h4" fontWeight={700} sx={{ color: "#fff", mb: 0.5 }}>
-                        {title}
+                <Typography variant="h5" fontWeight={700} sx={{ color: "#fff", fontSize: { xs: 24, sm: 32 }, mb: 0.5 }}>
+                    {title}
+                </Typography>
+                {subtitle && (
+                    <Typography sx={{ color: "#eaf4fd", fontSize: { xs: 15, sm: 18 } }}>
+                        {subtitle}
                     </Typography>
-                    {subtitle && (
-                        <Typography sx={{ color: "#eaf4fd" }}>{subtitle}</Typography>
-                    )}
-                </Box>{/* Header */}
+                )}
+            </Box>{/* Header */}
 
-                <Box sx={{ p: { xs: 2, sm: 4 } }}>{children}</Box>{/* Content */}
-            </Paper>
+            <Box sx={{
+                p: { xs: 2, sm: 4 },
+                maxWidth: 640,
+                mx: "auto"
+            }}>
+                {children}
+            </Box>{/* Content */}
         </Box>
     );
 }

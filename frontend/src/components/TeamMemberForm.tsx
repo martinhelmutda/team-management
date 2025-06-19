@@ -7,8 +7,8 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import CloseIcon from "@mui/icons-material/Close";
 import { Delete } from "@mui/icons-material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 type TeamMemberFormProps = {
     form: {
@@ -19,8 +19,6 @@ type TeamMemberFormProps = {
         groups: number[];
     };
     fieldErrors: { [k: string]: string };
-    error: string | null;
-    success: string | null;
     loading: boolean;
     role: "regular" | "admin";
     setRole: (r: "regular" | "admin") => void;
@@ -36,8 +34,6 @@ type TeamMemberFormProps = {
 export default function TeamMemberForm({
     form,
     fieldErrors,
-    error,
-    success,
     loading,
     role,
     setRole,
@@ -46,13 +42,37 @@ export default function TeamMemberForm({
     onCancel,
     onDelete,
     showDelete = false,
-    setConfirmOpen = () => {},
+    setConfirmOpen = () => { },
 }: TeamMemberFormProps) {
     return (
-        <Stack spacing={2} component="form" onSubmit={handleSubmit}>
-            {error && <Alert severity="error">{error}</Alert>}
-            {success && <Alert severity="success">{success}</Alert>}
 
+        <Stack spacing={2} component="form" onSubmit={handleSubmit}>
+
+            <Button
+                variant="text"
+                color="inherit"
+                startIcon={<ArrowBackIosNewIcon sx={{ fontSize: 18 }} />}
+                onClick={onCancel}
+                sx={{
+                    alignSelf: "flex-start",
+                    mt: 1,
+                    mb: 2,
+                    ml: "-6px",
+                    textTransform: "none",
+                    fontWeight: 500,
+                    fontSize: 15,
+                    px: 1,
+                    '&:hover': {
+                        background: 'transparent',
+                        textDecoration: 'underline',
+                    },
+                    color: "#3250bd"
+                }}
+            >
+                Return
+            </Button>
+
+            <Divider sx={{ my: 1 }} />
             <Box display="flex" alignItems="center" mb={1}>
                 <PersonOutlineIcon color="primary" sx={{ mr: 1 }} />
                 <Typography variant="h6" fontWeight={600}>
@@ -200,24 +220,7 @@ export default function TeamMemberForm({
             <Divider sx={{ my: 2 }} />
 
             <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Button
-                    variant="text"
-                    color="inherit"
-                    startIcon={<CloseIcon />}
-                    onClick={onCancel}
-                    sx={{
-                        fontWeight: 500,
-                        textTransform: "none",
-                        border: "1px solid #ccc",
-                        px: 3, py: 1.3,
-                        borderRadius: 3
-                    }}
-                    disabled={loading}
-                >
-                    Cancel
-                </Button>
-                <Box>
-                {showDelete && onDelete && setConfirmOpen && (
+                {showDelete && onDelete && setConfirmOpen ? (
                     <Button
                         type="button"
                         startIcon={<Delete />}
@@ -231,11 +234,12 @@ export default function TeamMemberForm({
                             px: 3,
                             py: 1.3,
                             borderRadius: 3,
-                            marginRight: 2,
                         }}
                     >
                         Delete
                     </Button>
+                ) : (
+                    <Box sx={{ width: 108 }} /> // Placeholder for delete button
                 )}
                 <Button
                     type="submit"
@@ -256,7 +260,6 @@ export default function TeamMemberForm({
                 >
                     Save
                 </Button>
-                </Box>
             </Box>
         </Stack>
     );

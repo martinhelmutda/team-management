@@ -9,13 +9,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import { Button } from "@mui/material";
+import { parseApiError, validateMemberForm } from "../utils/validation";
+import { useNotification } from "../context/NotificationContext";
 
 export default function Edit() {
+    const { setNotification } = useNotification();
     const { id } = useParams<{ id: string }>();
     const [form, setForm] = useState<MemberForm | null>(null);
     const [fieldErrors, setFieldErrors] = useState<{ [k: string]: string }>({});
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [role, setRole] = useState<"regular" | "admin">("regular");
@@ -37,39 +38,15 @@ export default function Edit() {
         if (!form) return;
         setForm({ ...form, [e.target.name]: e.target.value });
         setFieldErrors((prev) => ({ ...prev, [e.target.name]: "" }));
-        setError(null);
-        setSuccess(null);
+
     };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!form) return;
-        const errors: { [k: string]: string } = {};
-        if (!form.first_name.trim()) {
-            errors.first_name = "First name is required";
-        }
-        if (!form.last_name.trim()) {
-            errors.last_name = "Last name is required";
-        }
-        if (!form.email.trim()) {
-            errors.email = "Email is required";
-        } else {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(form.email)) {
-                errors.email = "Please enter a valid email address";
-            }
-        }
-        if (!form.phone_number.trim()) {
-            errors.phone_number = "Phone number is required";
-        } else {
-            const phoneRegex = /^[0-9]+$/;
-            if (!phoneRegex.test(form.phone_number)) {
-                errors.phone_number = "Phone number must contain only digits";
-            }
-        }
+        const errors = validateMemberForm(form);
         setFieldErrors(errors);
-        setError(null);
-        setSuccess(null);
+
         if (Object.keys(errors).length > 0) return;
         setLoading(true);
         try {
@@ -79,14 +56,13 @@ export default function Edit() {
                 body: JSON.stringify(form),
             });
             if (res.ok) {
-                setSuccess("Team member updated!");
+                setNotification({ type: "success", message: "Team member updated!" });
                 setTimeout(() => navigate("/"), 800);
             } else {
-                const data = await res.json();
-                setError(data?.detail || "Failed to update. Please try again.");
+            setNotification({ type: "error", message: await parseApiError(res) });
             }
         } catch {
-            setError("Network error. Please try again.");
+            setNotification({ type: "error", message: await parseApiError(res) });
         } finally {
             setLoading(false);
         }
@@ -99,12 +75,13 @@ export default function Edit() {
                 method: "DELETE",
             });
             if (res.ok) {
+                setNotification({ type: "success", message: "Team member deleted!" });
                 navigate("/");
             } else {
-                setError("Failed to delete. Please try again.");
+                setNotification({ type: "error", message: await parseApiError(res) });
             }
         } catch {
-            setError("Network error. Please try again.");
+            setNotification({ type: "error", message: "Network error. Please try again." });
         } finally {
             setLoading(false);
         }
@@ -117,8 +94,6 @@ export default function Edit() {
             <TeamMemberForm
                 form={form}
                 fieldErrors={fieldErrors}
-                error={error}
-                success={success}
                 loading={loading}
                 role={role}
                 setRole={(selected) => {
@@ -165,3 +140,5 @@ export default function Edit() {
         </MainContainer>
     );
 }
+
+
